@@ -1,0 +1,33 @@
+#!/bin/sh
+# Copyright (C) 2000-2020 Synology Inc. All rights reserved.
+
+case $1 in
+	start)
+		### Start this package.
+		testPkg1 "Start"
+		test1.py
+		echo "the package testPkg1 has been started" > $SYNOPKG_TEMP_LOGFILE
+		exit 0
+	;;
+	stop)
+		### Stop this package.
+		testPkg1 "Stop"
+		test1.py
+		echo "the package testPkg1 has been stopped" > $SYNOPKG_TEMP_LOGFILE
+		exit 0
+	;;
+	status)
+		### Check package alive.
+		if [ -h "/usr/local/bin/testPkg1" ]; then
+			exit 0
+		else
+			exit 1
+		fi
+	;;
+	killall)
+        ;;
+	log)
+		exit 0
+	;;
+esac
+

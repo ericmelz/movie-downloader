@@ -1,0 +1,8 @@
+{
+    "TestPackage1.js":{
+        "JSfiles": [
+            "dist/test_package1.bundle.js"
+        ],
+        "params": "-s -c skip"
+    }
+}
