@@ -3,15 +3,13 @@
 ## You can use CC CFLAGS LD LDFLAGS CXX CXXFLAGS AR RANLIB READELF STRIP after include env.mak
 include /env.mak
 
-EXEC= testPkg1
-OBJS= testPkg1.o
-PYTHON_SCRIPT= test1.py
-
 SUBDIR=ui WIZARD_UIFILES
+
+PYTHON_SCRIPT=backend/app/main.py
 
 .PHONY: all install $(SUBDIR)
 
-all: $(EXEC) $(SUBDIR)
+all: $(SUBDIR)
 
 $(SUBDIR):
 	@echo "===>" $@
@@ -21,10 +19,7 @@ $(SUBDIR):
 
 packageinstall: $(SUBDIR)
 
-install: $(EXEC) $(SUBDIR)
-	mkdir -p $(DESTDIR)/usr/local/bin/
-	install $< $(DESTDIR)/usr/local/bin/
-	install -m 755 $(PYTHON_SCRIPT) $(DESTDIR)/usr/local/bin/
+install: $(SUBDIR)
+	mkdir -p $(DESTDIR)/backend
+        cp -r backend $(DESTDIR)
 
-clean:
-	rm -rf *.o $(EXEC)

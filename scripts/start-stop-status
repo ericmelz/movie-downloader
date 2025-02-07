@@ -1,24 +1,31 @@
 #!/bin/sh
 # Copyright (C) 2000-2020 Synology Inc. All rights reserved.
 
+APP_DIR="/var/packages/MovieDownloader/target"
+PYTHON_ENV="$APP_DIR/backend/.venv/bin/python3.11"
+LOG_FILE="/var/log/movieDownloader.log"
+
 case $1 in
 	start)
 		### Start this package.
-		testPkg1 "Start"
-		test1.py
-		echo "the package testPkg1 has been started" > $SYNOPKG_TEMP_LOGFILE
+		echo "Starting movie downloader..." > $SYNOPKG_TEMP_LOGFILE
+                cd $APP_DIR/backend
+                $PYTHON_ENV -m uvicorn app.main:app --host 0.0.0.0 --port 8004
+		echo "movie downloader has been started" > $SYNOPKG_TEMP_LOGFILE		
+		echo $! > /var/run/movieDownloader.pid
 		exit 0
 	;;
 	stop)
 		### Stop this package.
-		testPkg1 "Stop"
-		test1.py
-		echo "the package testPkg1 has been stopped" > $SYNOPKG_TEMP_LOGFILE
+		echo "Stopping movie downloader..." > $SYNOPKG_TEMP_LOGFILE
+                kill $(cat /var/run/movieDownloader.pid)
+		rm -f /var/run/movieDownloader.pid
+		echo "movie downloader has been stopped" > $SYNOPKG_TEMP_LOGFILE
 		exit 0
 	;;
 	status)
 		### Check package alive.
-		if [ -h "/usr/local/bin/testPkg1" ]; then
+		if [ -f "/var/run/movieDownloader.pid" ]; then
 			exit 0
 		else
 			exit 1
