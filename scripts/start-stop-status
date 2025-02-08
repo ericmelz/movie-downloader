@@ -14,7 +14,7 @@ case $1 in
                 python3 -m venv venv
 		. venv/bin/activate
                 pip install -r requirements.txt
-                python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8004
+                python3 -m uvicorn app.main:app --host 0.0.0.0 --port 8004 &
 		echo "movie downloader has been started" > $SYNOPKG_TEMP_LOGFILE		
 		echo $! > /var/run/movieDownloader.pid
 		exit 0
