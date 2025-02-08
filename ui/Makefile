@@ -1,9 +1,9 @@
 include /env.mak
 
 JS_DIR="dist"
-JS_NAMESPACE="SYNO.SDS.App.TestPackage1"
-BUNDLE_JS="dist/test_package1.bundle.js"
-BUNDLE_CSS="dist/style/test_package1.bundle.css"
+JS_NAMESPACE="SYNO.SDS.App.MovieDownloader"
+BUNDLE_JS="dist/movie_downloader.bundle.js"
+BUNDLE_CSS="dist/style/movie_downloader.bundle.css"
 
 .PHONY: all $(SUBDIR)
 

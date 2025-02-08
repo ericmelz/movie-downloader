@@ -35,7 +35,7 @@ module.exports = async (env, argv) => {
 		entry: './src/main.js',
 		output: {
 			/* Need to write in config.define */
-			filename: 'test_package1.bundle.js',
+			filename: 'movie_downloader.bundle.js',
 			path: path.resolve('dist')
 		},
 		resolve: {
@@ -44,7 +44,7 @@ module.exports = async (env, argv) => {
 		plugins: [
 			new VueLoaderPlugin(),
 			new MiniCssExtractPlugin({
-			  filename: './style/test_package1.bundle.css'
+			  filename: './style/movie_downloader.bundle.css'
 			})
 		],
 		externals: {

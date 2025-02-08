@@ -1,7 +1,7 @@
 {
-    "TestPackage1.js":{
+    "MovieDownloader.js":{
         "JSfiles": [
-            "dist/test_package1.bundle.js"
+            "dist/movie_downloader.bundle.js"
         ],
         "params": "-s -c skip"
     }
