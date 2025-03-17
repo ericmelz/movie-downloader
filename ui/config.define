@@ -1,0 +1,8 @@
+{
+    "MovieDownloader.js":{
+        "JSfiles": [
+            "dist/movie_downloader.bundle.js"
+        ],
+        "params": "-s -c skip"
+    }
+}

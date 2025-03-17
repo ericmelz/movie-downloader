@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "make ${MAKE_FLAGS}"
+make ${MAKE_FLAGS}
