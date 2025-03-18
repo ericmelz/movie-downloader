@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Downloader</title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css"/>
+    <script src="https://unpkg.com/vue@3.4.9/dist/vue.global.js"></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+<header>
+    <h1>Movie Downloader</h1>
+</header>
+<section id="events">
+    <label for="pin">PIN </label>
+    <input id="pin" type="text" v-on:input="updatePin"><br/>
+    <p><button v-on:click="download">Download</button></p>
+
+</section>
+
+</body>
+</html>
