@@ -2,6 +2,7 @@ from uuid import uuid4
 
 import uvicorn as uvicorn
 from fastapi import FastAPI, BackgroundTasks, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic_settings import BaseSettings
 from sqlalchemy import Column, String, Boolean
@@ -49,6 +50,14 @@ async def init_models():
 
 app = FastAPI(on_startup=[init_models])
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:63342"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 
 async def get_db() -> AsyncSession:
     async with SessionLocal() as session:
@@ -93,7 +102,7 @@ async def get_report(report_id:str, db: AsyncSession = Depends(get_db)):
     report = await db.get(Report, report_id)
     if report and report.ready and os.path.exists(report.file_path):
         # TODO maybe: use timestamp instead of hardcoded name
-        return FileResponse(report.file_path, media_type="application/pdf", filename="{timestamp} movie report.pdf")
+        return FileResponse(report.file_path, media_type="application/pdf", filename="movie report.pdf")
     raise HTTPException(status_code=404, detail="Report not found or not ready")
 
 

@@ -1,7 +1,8 @@
 const app = Vue.createApp({
     data() {
         return {
-            pin: ''
+            pin: '',
+            loading: false
         }
     },
     methods: {
@@ -9,6 +10,7 @@ const app = Vue.createApp({
             this.pin = event.target.value;
         },
         async download() {
+            this.loading = true;
             console.log('pin is ' + this.pin)
             const response = await fetch('http://localhost:8000/generate', {method: 'POST'});
             if (!response.ok) throw new Error('Failed to download [Initiation failed]');
@@ -25,14 +27,17 @@ const app = Vue.createApp({
                         clearInterval(checkStatus);
                         window.open('http://localhost:8000' + statusData.url);
                         console.log('Successfully downloaded');
+                        this.loading = false;
                         return;
                     }
                 } else {
                     clearInterval(checkStatus);
+                    this.loading = false;
                     throw new Error('Failed to download [status check failed]');
                 }
                 time += 1000;
                 if (time > 10000) {
+                    this.loading = false;
                     throw new Error("Timeout!!");
                 }
             }, 1000);

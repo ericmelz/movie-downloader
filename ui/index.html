@@ -18,7 +18,7 @@
 <section id="events">
     <label for="pin">PIN </label>
     <input id="pin" type="text" v-on:input="updatePin"><br/>
-    <p><button v-on:click="download">Download</button></p>
+    <p><button v-on:click="download">{{ loading? "Downloading..." : "Download" }}</button></p>
 
 </section>
 
