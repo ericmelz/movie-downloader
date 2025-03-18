@@ -2,11 +2,13 @@ from uuid import uuid4
 
 import uvicorn as uvicorn
 from fastapi import FastAPI, BackgroundTasks, Depends, HTTPException
+from fastapi.responses import FileResponse
 from pydantic_settings import BaseSettings
 from sqlalchemy import Column, String, Boolean
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 import asyncio
+import os
 
 
 class Settings(BaseSettings):
@@ -66,8 +68,8 @@ async def generate_report_task(report_id: str):
         await db.commit()
 
 
-@app.post("/generate-report")
-async def generate_report_endpoint(background_tasks: BackgroundTasks, db: AsyncSession = Depends(get_db)):
+@app.post("/generate")
+async def generate_report(background_tasks: BackgroundTasks, db: AsyncSession = Depends(get_db)):
     report_id = "report_" + str(uuid4())
     new_report = Report(id=report_id, ready=False)
     # TODO add requested_at timestamp
@@ -77,12 +79,23 @@ async def generate_report_endpoint(background_tasks: BackgroundTasks, db: AsyncS
     return {"report_id": report_id}
 
 
-@app.get("/report-status/{report_id}")
+@app.get("/{report_id}/status")
 async def report_status(report_id: str, db: AsyncSession = Depends(get_db)):
     report = await db.get(Report, report_id)
     if report:
-        return {"ready": report.ready, "url": f"/get_report/{report_id}" if report.ready else None}
+        return {"ready": report.ready, "url": f"/{report_id}" if report.ready else None}
     raise HTTPException(status_code=404, detail="Report not found")
+
+
+@app.get("/{report_id}")
+async def get_report(report_id:str, db: AsyncSession = Depends(get_db)):
+    report = await db.get(Report, report_id)
+    if report and report.ready and os.path.exists(report.file_path):
+        # TODO hack for development
+        report.file_path = '/Users/ericmelz/Desktop/Eric Melz.pdf'
+        # TODO maybe: use timestamp instead of hardcoded name
+        return FileResponse(report.file_path, media_type="application/pdf", filename="{timestamp} movie report.pdf")
+    raise HTTPException(status_code=404, detail="Report not found or not ready")
 
 
 @app.get("/api/hello")
