@@ -10,6 +10,8 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 import asyncio
 import os
 
+from app.generator import generate_report_pdf
+
 
 class Settings(BaseSettings):
     db_user: str
@@ -57,9 +59,8 @@ async def generate_report_task(report_id: str):
     # TODO add logging, test with errors (e.g., missing dir)
     await asyncio.sleep(5)  # Simulate a long-running task
     report_path = f'{settings.report_output_dir}/{report_id}.pdf'
+    await generate_report_pdf(settings.movies_dir, report_path)
     print(f'writing to {report_path}')
-    with open(report_path, 'w') as f:
-        f.write('This is your generated report')
     async with SessionLocal() as db:
         report = await db.get(Report, report_id)
         report.ready = True
@@ -91,8 +92,6 @@ async def report_status(report_id: str, db: AsyncSession = Depends(get_db)):
 async def get_report(report_id:str, db: AsyncSession = Depends(get_db)):
     report = await db.get(Report, report_id)
     if report and report.ready and os.path.exists(report.file_path):
-        # TODO hack for development
-        report.file_path = '/Users/ericmelz/Desktop/Eric Melz.pdf'
         # TODO maybe: use timestamp instead of hardcoded name
         return FileResponse(report.file_path, media_type="application/pdf", filename="{timestamp} movie report.pdf")
     raise HTTPException(status_code=404, detail="Report not found or not ready")
