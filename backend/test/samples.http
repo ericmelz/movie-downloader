@@ -1,11 +1,7 @@
 ### POST a new report request
 POST http://localhost:8000/generate
 
-### GET report status - ready (but dummy report)
-GET http://localhost:8000/report_85590d01-e548-4ec6-8114-b8713cc836d8/status
-Accept: application/json
-
-### GET repor status - real report ready?
+### GET report status - ready
 GET http://localhost:8000/report_7d18f1ad-aaaa-4b0e-8f37-c69a2172c001/status
 Accept: application/json
 
