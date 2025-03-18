@@ -1,1 +1,14 @@
+### POST a new report request
 POST http://localhost:8000/generate-report
+
+### GET report status - ready
+GET http://localhost:8000/report-status/report_85590d01-e548-4ec6-8114-b8713cc836d8
+Accept: application/json
+
+### GET report status - not ready
+GET http://localhost:8000/report-status/report_f78d1549-949e-45f5-88b8-ec20968d1921
+Accept: application/json
+
+### GET report status - not found
+GET http://localhost:8000/report-status/doesnt-exist
+Accept: application/json

@@ -77,6 +77,14 @@ async def generate_report_endpoint(background_tasks: BackgroundTasks, db: AsyncS
     return {"report_id": report_id}
 
 
+@app.get("/report-status/{report_id}")
+async def report_status(report_id: str, db: AsyncSession = Depends(get_db)):
+    report = await db.get(Report, report_id)
+    if report:
+        return {"ready": report.ready, "url": f"/get_report/{report_id}" if report.ready else None}
+    raise HTTPException(status_code=404, detail="Report not found")
+
+
 @app.get("/api/hello")
 def read_root():
     return {"message": "Hello from FastAPI!!"}
